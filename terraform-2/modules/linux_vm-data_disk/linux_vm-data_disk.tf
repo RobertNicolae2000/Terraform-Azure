@@ -1,14 +1,15 @@
 # Virtual Machine
 resource "azurerm_windows_virtual_machine" "vm1" {
   name                = var.vm_name
-  resource_group_name = azurerm_resource_group.app-grp.name
-  location            = azurerm_resource_group.app-grp.location
+  resource_group_name = var.resource_group_name
+  location            = var.resource_location
   size                = "Standard_B2s"
   admin_username      = var.admin_username
   admin_password      = var.admin_password
   network_interface_ids = [
-    azurerm_network_interface.network-interface.id,
+    var.network_interface_id
   ]
+  tags = var.tags
 
   os_disk {
     caching              = "ReadWrite"
@@ -27,11 +28,12 @@ resource "azurerm_windows_virtual_machine" "vm1" {
 
 resource "azurerm_managed_disk" "disk" {
   name                 = "${var.vm_name}-disk1"
-  location             = azurerm_resource_group.app-grp.location
-  resource_group_name  = azurerm_resource_group.app-grp.name
+  location             = var.resource_location
+  resource_group_name  = var.resource_group_name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = 10
+  tags = var.tags
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "disk-attachment" {

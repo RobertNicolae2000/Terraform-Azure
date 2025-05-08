@@ -1,4 +1,4 @@
-variable "location" {
+variable "resource_location" {
   type = string
 }
 

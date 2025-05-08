@@ -17,32 +17,25 @@ variable "tags" {
   type        = map(string)
 }
 
-# VM Configuration
+# Public IP Configuration and Network Interface Configuration
 
-variable "vm_name" {
-  description = "Type the name of the VM"
+variable "network_interface_name" {
+  description = "The name of the network interface"
+  type        = string
+  
+}
+
+variable "public_ip_name" {
+  description = "The name of the public IP address"
   type        = string
 }
 
-variable "admin_username" {
-  description = "Type the name of the admin user"
+variable "ip_configuration_name" {
+  description = "The name of the IP configuration"
   type        = string
 }
 
-variable "admin_password" {
-  description = "Type the password of the admin user"
-  type        = string
-  sensitive   = true
-}
-
-variable "vm_size" {
-  description = "Type the size of the VM"
-  type        = string
-}
-
-# Network Configuration
-
-variable "network_interface_id" {
-  description = "The ID of the network interface"
+variable "vitual_network_subnet_id" {
+  description = "The ID of the virtual network subnet"
   type        = string
 }

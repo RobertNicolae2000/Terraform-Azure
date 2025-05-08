@@ -1,3 +1,5 @@
+# Storage Configuration
+
 variable "container_name" {
   description = "The name of the storage container"
   type        = string

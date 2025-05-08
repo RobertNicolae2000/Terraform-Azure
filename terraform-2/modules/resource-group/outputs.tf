@@ -3,7 +3,7 @@ output "name" {
   value       = azurerm_resource_group.app-grp.name
 }
 
-output "location" {
+output "resource_location" {
   description = "The location of the resource group"
   value       = var.resource_location
 }
