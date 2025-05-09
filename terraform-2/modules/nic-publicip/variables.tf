@@ -39,3 +39,8 @@ variable "vitual_network_subnet_id" {
   description = "The ID of the virtual network subnet"
   type        = string
 }
+
+variable "vm_count" {
+  description = "The number of instances to create"
+  type        = number
+}

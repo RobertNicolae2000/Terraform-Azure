@@ -44,5 +44,20 @@ variable "vm_size" {
 
 variable "network_interface_id" {
   description = "The ID of the network interface"
+  type        = list(string)
+}
+
+variable "init_script" {
+  description = "The initialization script to be run on the VM"
+  type        = string
+}
+
+variable "vm_count" {
+  description = "The number of instances to create"
+  type        = number
+}
+
+variable "computer_name" {
+  description = "The computer name for the VM"
   type        = string
 }

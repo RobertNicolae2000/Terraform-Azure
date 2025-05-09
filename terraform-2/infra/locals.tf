@@ -35,3 +35,19 @@ locals {
   vm_name = "dev-vm"
   vm_size = "Standard_DS1_v2"
 }
+
+locals {
+  init_script = <<-EOT
+    #!/bin/bash
+    apt-get update -y
+    apt-get install -y jq
+  EOT
+}
+
+locals {
+  vm_count = 2
+}
+
+locals {
+  computer_name = "devlinux"
+}

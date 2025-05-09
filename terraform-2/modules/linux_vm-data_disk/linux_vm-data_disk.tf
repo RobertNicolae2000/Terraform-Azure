@@ -1,33 +1,40 @@
 # Virtual Machine
-resource "azurerm_windows_virtual_machine" "vm1" {
-  name                = var.vm_name
+resource "azurerm_linux_virtual_machine" "vm1" {
+  count             = var.vm_count
+  name                = "${var.vm_name}${count.index}"
+  computer_name       = "${var.computer_name}${count.index}"
   resource_group_name = var.resource_group_name
   location            = var.resource_location
-  size                = "Standard_B2s"
+  size                = "Standard_B1ms"
   admin_username      = var.admin_username
   admin_password      = var.admin_password
   network_interface_ids = [
-    var.network_interface_id
+    var.network_interface_id[count.index]
   ]
   tags = var.tags
+  disable_password_authentication = false
 
   os_disk {
+    name             = "${var.vm_name}-osdisk-${count.index}"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
 
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2022-Datacenter"
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-lts"
     version   = "latest"
   }
+  
+  custom_data = base64encode(var.init_script)
 }
 
-# Create and attack a Data Disk
+# Create and attach a Data Disk
 
 resource "azurerm_managed_disk" "disk" {
-  name                 = "${var.vm_name}-disk1"
+  count               = var.vm_count
+  name                 = "${var.vm_name}-disk-${count.index}"
   location             = var.resource_location
   resource_group_name  = var.resource_group_name
   storage_account_type = "Standard_LRS"
@@ -37,8 +44,9 @@ resource "azurerm_managed_disk" "disk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "disk-attachment" {
-  managed_disk_id    = azurerm_managed_disk.disk.id
-  virtual_machine_id = azurerm_windows_virtual_machine.vm1.id
+  count             = var.vm_count
+  managed_disk_id    = azurerm_managed_disk.disk[count.index].id
+  virtual_machine_id = azurerm_linux_virtual_machine.vm1[count.index].id
   lun                = "10"
   caching            = "ReadWrite"
 }

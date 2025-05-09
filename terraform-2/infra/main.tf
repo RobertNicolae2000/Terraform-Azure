@@ -50,6 +50,7 @@ module "virtual_network" {
 module "nic-publicip" {
   source = "../modules/nic-publicip"
 
+  vm_count                = local.vm_count
   network_interface_name = local.network_interface_name
   public_ip_name         = local.public_ip_name
   ip_configuration_name   = local.ip_configuration_name
@@ -79,7 +80,9 @@ data "azurerm_key_vault_secret" "admin_password" {
 module "linux_vm_data_disk" {
   source = "../modules/linux_vm-data_disk"
 
+  vm_count = local.vm_count
   vm_name              = local.vm_name
+  computer_name        = local.computer_name
   vm_size = local.vm_size
   admin_username       = data.azurerm_key_vault_secret.admin_username.value
   admin_password       = data.azurerm_key_vault_secret.admin_password.value
@@ -87,6 +90,6 @@ module "linux_vm_data_disk" {
   resource_location    = module.resource-group.resource_location
   network_interface_id = module.nic-publicip.network_interface_id
   tags = local.tags
+  init_script = local.init_script
 }
-
 
